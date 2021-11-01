@@ -14,6 +14,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool validated = false;
     return Scaffold(
       backgroundColor: Colors.grey[500],
       appBar: AppBar(
@@ -83,11 +84,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 setState(() {
                   print("Form Validation : " +
                       _formKey.currentState.validate().toString());
-                  if (_passwordController.text.length < 3)
-                    _passwordError = "Enter at least 3 char";
-                  else
+                  if (_passwordController.text.length < 8)
+                    _passwordError = "Enter at least 8 char";
+                  else {
                         _passwordError = null;
+                        validated = true;
+                      }
                     });
+                if(validated = true){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Menu())
+                  );
+                }
               },
                 child: Text('Submit'),
                 style: ButtonStyle(

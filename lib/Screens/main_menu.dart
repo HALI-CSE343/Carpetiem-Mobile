@@ -10,6 +10,19 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar : AppBar(
+        title: Text("Menu"),
+      ),
+      body: Center(
+        child:
+          ElevatedButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text('Return to login page'),
+          )
+      )
+    );
   }
 }
