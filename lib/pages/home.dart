@@ -45,7 +45,14 @@ class _HomeState extends State<Home> {
             ElevatedButton(
               onPressed: () {
                 String phone = phoneController.text;
-                _findUser(phone);
+                if (phone.length != 10) {
+                  Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
+                } else {
+                  // casting phone number 5553332244 -> (555) 333 22 44
+                  phone = '(' + phone.substring(0, 3) + ") " + phone.substring(3, 6) + ' ' + phone.substring(6, 10);
+                  Fluttertoast.showToast(msg: phone);
+                  _findUser(phone);
+                }
               },
               child: const Text("Generate QR Code"),
             ),
@@ -62,7 +69,7 @@ class _HomeState extends State<Home> {
       child: TextField(
         controller: phoneController,
         keyboardType: TextInputType.phone,
-        maxLength: 10,
+        maxLength: 13,
         textAlign: TextAlign.center,
         decoration: const InputDecoration(
           hintText: "Müşteri Telefon Numarası",
@@ -85,6 +92,6 @@ class _HomeState extends State<Home> {
       toastLength: Toast.LENGTH_LONG,
     );
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => QrGenerate(phoneNumber: phone)));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => QrGenerate(customerID: docRef.id)));
   }
 }

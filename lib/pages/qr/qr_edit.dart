@@ -62,7 +62,7 @@ class _QrEditState extends State<QrEdit> {
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return _printCustomerInfo(data['address'], data['city'], data['district'], data['neighborhood'], data['name'], data['phone'], data['mail']);
+          return _printCustomerInfo(data['address'], data['city'], data['district'], data['neighborhood'], data['name'], data['phone'], data['email']);
         }
 
         return const Center(child: CircularProgressIndicator());
