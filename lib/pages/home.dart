@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:qr_code/pages/qr/qr_generate.dart';
 import 'package:qr_code/pages/qr/qr_scan.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -45,10 +44,17 @@ class _HomeState extends State<Home> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const QrGenerate()));
               },
               child: const Text("Generate QR Code"),
-            )
+            ),
+            _getPhoneNumber(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _getPhoneNumber() {
+    return InternationalPhoneNumberInput(
+      onInputChanged: (value) {},
     );
   }
 }
