@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code/pages/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Screens/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +13,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
+    return MaterialApp(
+      home: LoginPage()
     );
+
   }
 }

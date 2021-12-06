@@ -1,112 +1,152 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/main_menu.dart';
+import 'auth.dart';
+import '../pages/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  final String title = "Login";
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginPageState createState() => new _LoginPageState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool _secureText = true;
-  TextEditingController _passwordController = TextEditingController();
-  String _passwordError;
-  var _formKey = GlobalKey<FormState>();
+enum FormType {
+  login,
+  register
+}
+
+class _LoginPageState extends State<LoginPage> {
+  static final formKey = new GlobalKey<FormState>();
+
+  late String _email;
+  late String _password;
+  FormType _formType = FormType.login;
+  String _authHint = '';
+
+  bool validateAndSave() {
+    final form = formKey.currentState;
+    if (form!.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
+  }
+
+  void validateAndSubmit() async {
+    if (validateAndSave()) {
+      try {
+        String userId = await Auth().signIn(_email, _password);
+        setState(() {
+          _authHint = 'Found \n\nUser id: $userId';
+        });
+        FirebaseFirestore.instance
+            .collection('employees')
+            .doc(userId)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          }
+        });
+
+      }
+      catch (e) {
+        setState(() {
+          _authHint = 'Sign In Error\n\n${e.toString()}';
+        });
+        print(e);
+      }
+    } else {
+      setState(() {
+        _authHint = '';
+      });
+    }
+  }
+
+
+  List<Widget> usernameAndPassword() {
+    return [
+      padded(child:  TextFormField(
+        key:  Key('email'),
+        decoration:  InputDecoration(labelText: 'Email'),
+        autocorrect: false,
+        validator: (val) => val!.isEmpty ? 'Email can\'t be empty.' : null,
+        onSaved: (val) => _email = val!,
+      )),
+      padded(child:  TextFormField(
+        key:  Key('password'),
+        decoration:  InputDecoration(labelText: 'Password'),
+        obscureText: true,
+        autocorrect: false,
+        validator: (val) => val!.isEmpty ? 'Password can\'t be empty.' : null,
+        onSaved: (val) => _password = val!,
+      )),
+    ];
+  }
+
+  List<Widget> submitWidgets() {
+        return[
+           ElevatedButton(
+              key: new Key('login'),
+              child: new Text("Login"),
+              onPressed: validateAndSubmit
+          )
+        ];
+  }
+
+  Widget hintText() {
+    return  Container(
+      //height: 80.0,
+        padding: const EdgeInsets.all(32.0),
+        child:  Text(
+            _authHint,
+            key:  Key('hint'),
+            style:  TextStyle(fontSize: 18.0, color: Colors.grey),
+            textAlign: TextAlign.center)
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    bool validated = false;
     return Scaffold(
-      backgroundColor: Colors.grey[500],
-      appBar: AppBar(
-        title: Text("HALI"),
-        centerTitle: true,
-        backgroundColor: Colors.grey[800],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        validator: (String value) {
-                          if (value.length < 10)
-                            return "Enter at least 10 char";
-                          else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Your e-mail",
-                            labelText: "Login",
-                            labelStyle:
-                            TextStyle(fontSize: 24, color: Colors.black),
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      TextFormField(
-                        validator: (String value) {
-                          if (value.length < 3)
-                            return "Enter at least 3 char";
-                          else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Password",
-                            labelText: "Password",
-                            labelStyle:
-                            TextStyle(fontSize: 24, color: Colors.black),
-                            filled: true,
-                            fillColor: Colors.white70,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                        ),
-                        obscureText: true,
-                      ),
-                    ],
-                  )),
-              SizedBox(
-                height: 16,
-              ),
-              ElevatedButton(onPressed: () {
-                print("Password : " + _passwordController.text);
-                setState(() {
-                  print("Form Validation : " +
-                      _formKey.currentState.validate().toString());
-                  if (_passwordController.text.length < 8)
-                    _passwordError = "Enter at least 8 char";
-                  else {
-                        _passwordError = null;
-                        validated = true;
-                      }
-                    });
-                if(validated = true){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Menu())
-                  );
-                }
-              },
-                child: Text('Submit'),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.grey[900]),
-                )
-              )
-            ],
-          ),
+        appBar: AppBar(
+          title: new Text(widget.title),
         ),
-      ),
+        backgroundColor: Colors.grey[300],
+        body:  SingleChildScrollView(child: Container(
+            padding:  EdgeInsets.all(16.0),
+            child: Column(
+                children: [
+                  Card(
+                      child:  Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                             Container(
+                                padding: const EdgeInsets.all(16.0),
+                                child:  Form(
+                                    key: formKey,
+                                    child:  Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: usernameAndPassword() + submitWidgets(),
+                                    )
+                                )
+                            ),
+                          ])
+                  ),
+                  hintText()
+                ]
+            )
+        ))
+    );
+  }
+
+  Widget padded({required Widget child}) {
+    return  Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: child,
     );
   }
 }
