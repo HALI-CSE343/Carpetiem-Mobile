@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrGenerate extends StatefulWidget {
@@ -273,7 +272,7 @@ class _QrGenerateState extends State<QrGenerate> {
                             Text("Carpet ID: $newCarpetID"),
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(Icons.download_rounded),
+                              icon: const Icon(Icons.download_rounded),
                               iconSize: 50,
                             )
                           ],

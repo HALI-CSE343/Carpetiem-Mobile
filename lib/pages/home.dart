@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_code/pages/qr/qr_generate.dart';
 import 'package:qr_code/pages/qr/qr_scan.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,54 +29,130 @@ class _HomeState extends State<Home> {
       /* Body - Buttons */
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            /* First Button */
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const QrScan()));
-              },
-              child: const Text("Scan QR Code"),
+            const SizedBox(height: 10),
+            /* Logo */
+            Image.asset(
+              'assets/images/logo.png',
+              scale: 3,
             ),
-            Container(
-              height: 5,
-              color: Colors.black,
+            const SizedBox(height: 50),
+
+            /* First Button */
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: _scanQRCode(),
             ),
 
             /* Second Button */
-            ElevatedButton(
-              onPressed: () {
-                String phone = phoneController.text;
-                if (phone.length != 10) {
-                  Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
-                } else {
-                  // casting phone number 5553332244 -> (555) 333 22 44
-                  phone = '(' + phone.substring(0, 3) + ") " + phone.substring(3, 6) + ' ' + phone.substring(6, 10);
-                  Fluttertoast.showToast(msg: phone);
-                  _findUser(phone);
-                }
-              },
-              child: const Text("Generate QR Code"),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: _generateQRCode(),
             ),
-            _getPhoneNumber(),
+
+            /* Customer's phone number */
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: _getPhoneNumber(),
+            ),
           ],
+        ),
+      ),
+      backgroundColor: const Color(0xFFC1BFE5),
+    );
+  }
+
+  ElevatedButton _generateQRCode() {
+    return ElevatedButton(
+      onPressed: () {
+        String phone = phoneController.text;
+        if (phone.length != 14) {
+          Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
+        } else {
+          _findUser(phone);
+        }
+      },
+      child: const Text(
+        "QR Kod Oluştur",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(const Size(100, 56)),
+        backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: const BorderSide(
+              color: Colors.black,
+              width: 4,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ElevatedButton _scanQRCode() {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const QrScan()));
+      },
+      child: const Text(
+        "QR Kod Tara",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(const Size(100, 56)),
+        backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: const BorderSide(
+              color: Colors.black,
+              width: 4,
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _getPhoneNumber() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: TextField(
         controller: phoneController,
         keyboardType: TextInputType.phone,
-        maxLength: 13,
         textAlign: TextAlign.center,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           hintText: "Müşteri Telefon Numarası",
-          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Colors.black,
+              width: 3,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Colors.black,
+              width: 3,
+            ),
+          ),
         ),
+        inputFormatters: [MaskTextInputFormatter(mask: "(###) ### ####")],
       ),
     );
   }
@@ -82,6 +160,11 @@ class _HomeState extends State<Home> {
   Future _findUser(String phone) async {
     // Customer as QuerySnapshot
     QuerySnapshot customer = await FirebaseFirestore.instance.collection('customers').where('phone', isEqualTo: phone).get();
+    // Warn the user if customer doesn't exist
+    if (customer.docs.isEmpty) {
+      Fluttertoast.showToast(msg: "Bu numarayla kayıtlı müşteri bulunmamakta.");
+      return;
+    }
     // Getting document snapshot of the query
     QueryDocumentSnapshot doc = customer.docs[0];
     // Document reference of that snapshot
