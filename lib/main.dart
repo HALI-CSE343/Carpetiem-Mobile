@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Screens/login.dart';
+import 'Screens/auth.dart';
+import 'pages/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,9 +15,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage()
-    );
-
+    bool UserExists = false;
+    void userCheck() async{
+        if(await Auth().currentUser() != null)
+          UserExists = true;
+    }
+    userCheck();
+    if(UserExists == false) {
+      return MaterialApp(home: LoginPage());
+    }else{
+      return MaterialApp(home: Home());
+    }
   }
 }

@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
   final String title = "Login";
 
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 enum FormType {
@@ -18,11 +18,10 @@ enum FormType {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static final formKey = new GlobalKey<FormState>();
+  static final formKey = GlobalKey<FormState>();
 
   late String _email;
   late String _password;
-  FormType _formType = FormType.login;
   String _authHint = '';
 
   bool validateAndSave() {
@@ -68,85 +67,97 @@ class _LoginPageState extends State<LoginPage> {
 
   List<Widget> usernameAndPassword() {
     return [
-      padded(child:  TextFormField(
-        key:  Key('email'),
-        decoration:  InputDecoration(labelText: 'Email'),
+      Image.asset(
+        'assets/images/logo.png',
+        scale: 4,
+      ),
+      const SizedBox(height: 20),
+      const Text(
+        "CarpeTiem",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold
+        ),
+
+      ),
+      const SizedBox(height: 30),
+      TextFormField(
+        key:  const Key('email'),
+        decoration:  const InputDecoration(labelText: 'Email'),
         autocorrect: false,
         validator: (val) => val!.isEmpty ? 'Email can\'t be empty.' : null,
         onSaved: (val) => _email = val!,
-      )),
-      padded(child:  TextFormField(
-        key:  Key('password'),
-        decoration:  InputDecoration(labelText: 'Password'),
+      ),
+       TextFormField(
+        key:  const Key('password'),
+        decoration:  const InputDecoration(labelText: 'Password'),
         obscureText: true,
         autocorrect: false,
         validator: (val) => val!.isEmpty ? 'Password can\'t be empty.' : null,
         onSaved: (val) => _password = val!,
-      )),
+      ),
     ];
   }
 
   List<Widget> submitWidgets() {
         return[
-           ElevatedButton(
-              key: new Key('login'),
-              child: new Text("Login"),
-              onPressed: validateAndSubmit
+          const SizedBox(height: 10),
+          ElevatedButton(
+              key: const Key('login'),
+              child: const Text(
+                "Login",
+                style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              ),
+              onPressed: validateAndSubmit,
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all(const Size(100, 56)),
+                backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: const BorderSide(
+                      color: Colors.black,
+                      width: 4,
+                    ),
+                  ),
+                ),
+              )
           )
         ];
   }
-
-  Widget hintText() {
-    return  Container(
-      //height: 80.0,
-        padding: const EdgeInsets.all(32.0),
-        child:  Text(
-            _authHint,
-            key:  Key('hint'),
-            style:  TextStyle(fontSize: 18.0, color: Colors.grey),
-            textAlign: TextAlign.center)
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: new Text(widget.title),
+          title: Text(widget.title),
+            backgroundColor: Colors.grey[900],
         ),
-        backgroundColor: Colors.grey[300],
-        body:  SingleChildScrollView(child: Container(
-            padding:  EdgeInsets.all(16.0),
+        backgroundColor: const Color(0xFFC1BFE5),
+        body: SingleChildScrollView(child: Container(
+
+            padding: EdgeInsets.all(16.0),
             child: Column(
-                children: [
-                  Card(
-                      child:  Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                             Container(
-                                padding: const EdgeInsets.all(16.0),
-                                child:  Form(
-                                    key: formKey,
-                                    child:  Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      children: usernameAndPassword() + submitWidgets(),
-                                    )
-                                )
-                            ),
-                          ])
-                  ),
-                  hintText()
-                ]
+              children: <Widget>[
+                Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                        key: formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: usernameAndPassword() + submitWidgets(),
+
+                        )
+                    )
+                ),
+              ],
             )
         ))
-    );
-  }
-
-  Widget padded({required Widget child}) {
-    return  Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: child,
     );
   }
 }
