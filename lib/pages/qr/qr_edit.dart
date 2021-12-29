@@ -223,7 +223,7 @@ class _QrEditState extends State<QrEdit> {
           child: Text(
             "Halı Bilgileri",
             style: TextStyle(
-              fontSize: 30,
+              fontSize: 23,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -299,7 +299,7 @@ class _QrEditState extends State<QrEdit> {
           const Text(
             "Halı Durumunu Değiştir\n",
             style: TextStyle(
-              fontSize: 30,
+              fontSize: 23,
               fontWeight: FontWeight.bold,
             ),
           ),

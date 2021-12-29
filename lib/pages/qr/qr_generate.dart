@@ -19,6 +19,7 @@ class _QrGenerateState extends State<QrGenerate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Generate QR", style: TextStyle(color: Colors.black)),
