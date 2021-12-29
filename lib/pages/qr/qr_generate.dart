@@ -21,8 +21,13 @@ class _QrGenerateState extends State<QrGenerate> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("CarpeTiem - QR Kod Oluşturma"),
-        backgroundColor: Colors.grey[900],
+        title: const Text("Generate QR", style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed:  () => Navigator.pop(context),
+          ),
       ),
       body: Column(
         children: [
@@ -44,7 +49,7 @@ class _QrGenerateState extends State<QrGenerate> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
       ),
-      backgroundColor: Colors.blueGrey[200],
+      backgroundColor: Colors.white,
     );
   }
 
@@ -72,86 +77,90 @@ class _QrGenerateState extends State<QrGenerate> {
   }
 
   Widget _printCustomerInfo(address, city, district, neighborhood, name, phone) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        // Spacing between Appbar and Müşteri Bilgileri
-        const Align(
-          child: SizedBox.square(
-            dimension: 20,
-          ),
-          alignment: Alignment.center,
-        ),
-
-        // Text: Müşteri Bilgileri
-        const Center(
-          child: Text(
-            "Müşteri Bilgileri",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-        ),
-        // Spacing between Müşteri Bilgileri and texts
-        const Align(
-          child: SizedBox.square(
-            dimension: 20,
-          ),
-          alignment: Alignment.center,
-        ),
-
-        Row(
-          children: [
-            Column(
-              children: [
-                RichText(
-                    text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                        ),
-                        children: <TextSpan>[
-                      TextSpan(text: "  İsim\n"),
-                      TextSpan(text: "  Telefon\n"),
-                      TextSpan(text: "  Şehir\n"),
-                      TextSpan(text: "  İlçe\n"),
-                      TextSpan(text: "  Semt\n"),
-                      TextSpan(text: "  Adres\n"),
-                    ]))
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return Card(
+      color: Colors.black,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          // Spacing between Appbar and Müşteri Bilgileri
+          const Align(
+            child: SizedBox.square(
+              dimension: 20,
             ),
-            const Align(
-              child: SizedBox.square(
-                dimension: 10,
+            alignment: Alignment.center,
+          ),
+
+          // Text: Müşteri Bilgileri
+          const Center(
+            child: Text(
+              "Müşteri Bilgileri",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+          // Spacing between Müşteri Bilgileri and texts
+          const Align(
+            child: SizedBox.square(
+              dimension: 20,
+            ),
+            alignment: Alignment.center,
+          ),
+
+          Row(
+            children: [
+              Column(
+                children: [
+                  RichText(
+                      text: const TextSpan(
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            height: 1.5,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: "  İsim\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "  Telefon\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "  Şehir\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "  İlçe\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "  Semt\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: "  Adres\n", style: TextStyle(color: Colors.white)),
+                          ]))
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
               ),
-              alignment: Alignment.center,
-            ),
-            Column(
-              children: [
-                RichText(
-                    text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          height: 1.5,
-                        ),
-                        children: <TextSpan>[
-                      TextSpan(text: ": $name   \n"),
-                      TextSpan(text: ": $phone  \n"),
-                      TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n"),
-                      TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n"),
-                      TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n"),
-                      TextSpan(text: ": $address\n"),
-                    ]))
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            )
-          ],
-        ),
-      ],
+              const Align(
+                child: SizedBox.square(
+                  dimension: 10,
+                ),
+                alignment: Alignment.center,
+              ),
+              Column(
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            height: 1.5,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(text: ": $name   \n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: ": $phone  \n"),
+                            TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                            TextSpan(text: ": $address\n", style: TextStyle(color: Colors.white)),
+                          ]))
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+              )
+            ],
+          ),
+        ],
+      )
     );
   }
 
@@ -163,7 +172,7 @@ class _QrGenerateState extends State<QrGenerate> {
         const Center(
           child: Text(
             "Yeni Halı Bilgileri",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         // Spacing between Yeni Halı Bilgileri and texts
@@ -177,15 +186,18 @@ class _QrGenerateState extends State<QrGenerate> {
         Padding(
           padding: const EdgeInsets.all(15),
           child: TextField(
-            decoration: const InputDecoration(
-              hintText: "Örnek: 2m²",
-              alignLabelWithHint: true,
-              labelText: "Halının alanı",
-              labelStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(8.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              hintText: "Carpet's size(Ex: 0.5, 2, 97(m^2))",
             ),
             keyboardType: TextInputType.phone,
             cursorWidth: 2,
@@ -197,15 +209,18 @@ class _QrGenerateState extends State<QrGenerate> {
         Padding(
           padding: const EdgeInsets.all(15),
           child: TextField(
-            decoration: const InputDecoration(
-              hintText: "Örnek: 80 TL",
-              alignLabelWithHint: true,
-              labelText: "Halının fiyatı",
-              labelStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(8.0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              hintText: "Carpet's price(Ex: 0.9, 24.8, 73(Tl))",
             ),
             keyboardType: TextInputType.phone,
             cursorWidth: 2,
@@ -228,6 +243,14 @@ class _QrGenerateState extends State<QrGenerate> {
       child: ElevatedButton(
         // Customization
         child: const Text("Başka QR Kod Oluştur"),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        ),
         // Functional Partf
         onPressed: () {
           Navigator.pop(context);
@@ -249,6 +272,14 @@ class _QrGenerateState extends State<QrGenerate> {
       child: ElevatedButton(
         // Customization
         child: const Text("Oluştur"),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        ),
         // Functional Partf
         onPressed: () {
           _getNewCarpetID(area, cost, customerID, status, type).then((value) => {
@@ -306,7 +337,6 @@ class _QrGenerateState extends State<QrGenerate> {
           "Halının tipi : ",
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
           ),
         ),
         Expanded(

@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           UserExists = true;
     }
     userCheck();
-    if(UserExists == false) {
+    if(UserExists == true) {
       return MaterialApp(home: LoginPage());
     }else{
       return MaterialApp(home: Home());

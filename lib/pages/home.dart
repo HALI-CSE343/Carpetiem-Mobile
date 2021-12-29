@@ -19,46 +19,59 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* App Bar */
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        centerTitle: true,
-        title: const Text("CarpeTiem"),
-      ),
+      resizeToAvoidBottomInset: false,
 
       /* Body - Buttons */
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            AppBar(
+              title: const Text(
+                  "CarpeTiem",
+                  style: TextStyle(fontSize: 30, color: Colors.black)
+              ),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.exit_to_app, color: Colors.black),
+                  onPressed:  () => Navigator.pop(context),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 130),
             /* Logo */
             Image.asset(
-              'assets/images/logo.png',
-              scale: 3,
+              'assets/images/search.png',
+              scale: 4,
             ),
             const SizedBox(height: 50),
 
+            /* Customer's phone number */
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: _getPhoneNumber(),
+            ),
             /* First Button */
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: _scanQRCode(),
             ),
 
             /* Second Button */
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 1),
               child: _generateQRCode(),
             ),
 
-            /* Customer's phone number */
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-              child: _getPhoneNumber(),
-            ),
+
+
           ],
         ),
       ),
-      backgroundColor: const Color(0xFFC1BFE5),
+      backgroundColor: Colors.white,
     );
   }
 
@@ -75,24 +88,20 @@ class _HomeState extends State<Home> {
       child: const Text(
         "QR Kod Oluştur",
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(const Size(100, 56)),
-        backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(
-              color: Colors.black,
-              width: 4,
-            ),
-          ),
-        ),
-      ),
+        style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(const Size(320, 48)),
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        )
     );
   }
 
@@ -104,24 +113,20 @@ class _HomeState extends State<Home> {
       child: const Text(
         "QR Kod Tara",
         style: TextStyle(
-          color: Colors.black,
+          color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
       ),
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(const Size(100, 56)),
-        backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(
-              color: Colors.black,
-              width: 4,
-            ),
-          ),
-        ),
-      ),
+        style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(const Size(320, 48)),
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        )
     );
   }
 
@@ -136,21 +141,17 @@ class _HomeState extends State<Home> {
         keyboardType: TextInputType.phone,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
-          hintText: "Müşteri Telefon Numarası",
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 3,
-            ),
+          contentPadding: const EdgeInsets.all(8.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.black,
-              width: 3,
-            ),
+            borderRadius: BorderRadius.circular(18.0),
           ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          hintText: "Customer's phone number",
         ),
         inputFormatters: [MaskTextInputFormatter(mask: "(###) ### ####")],
       ),

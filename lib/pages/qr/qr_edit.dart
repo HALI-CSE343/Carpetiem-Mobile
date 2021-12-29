@@ -22,8 +22,13 @@ class _QrEditState extends State<QrEdit> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("CarpeTiem - Anlık Durum Sayfası"),
-        backgroundColor: Colors.grey[900],
+        title: const Text("Edit QR", style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed:  () => Navigator.pop(context),
+        ),
       ),
       body: Column(
         children: [
@@ -43,7 +48,7 @@ class _QrEditState extends State<QrEdit> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
       ),
-      backgroundColor: Colors.blueGrey[200],
+      backgroundColor: Colors.white,
     );
   }
 
@@ -70,89 +75,91 @@ class _QrEditState extends State<QrEdit> {
     );
   }
 
-  Widget _printCustomerInfo(address, city, district, neighborhood, name, phone, mail) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        // Spacing between Appbar and Müşteri Bilgileri
-        const Align(
-          child: SizedBox.square(
-            dimension: 20,
-          ),
-          alignment: Alignment.center,
-        ),
-
-        // Text: Müşteri Bilgileri
-        const Center(
-          child: Text(
-            "Müşteri Bilgileri",
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-        ),
-        // Spacing between Müşteri Bilgileri and texts
-        const Align(
-          child: SizedBox.square(
-            dimension: 20,
-          ),
-          alignment: Alignment.center,
-        ),
-
-        Row(
+  Widget _printCustomerInfo(address, city, district, neighborhood, name, phone, email) {
+    return Card(
+        color: Colors.black,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Column(
-              children: [
-                RichText(
-                    text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          height: 1.5,
-                        ),
-                        children: <TextSpan>[
-                      TextSpan(text: "  İsim\n"),
-                      TextSpan(text: "  Telefon\n"),
-                      TextSpan(text: "  E-mail\n"),
-                      TextSpan(text: "  Şehir\n"),
-                      TextSpan(text: "  İlçe\n"),
-                      TextSpan(text: "  Semt\n"),
-                      TextSpan(text: "  Adres\n"),
-                    ]))
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            ),
+            // Spacing between Appbar and Müşteri Bilgileri
             const Align(
               child: SizedBox.square(
-                dimension: 10,
+                dimension: 20,
               ),
               alignment: Alignment.center,
             ),
-            Column(
+
+            // Text: Müşteri Bilgileri
+            const Center(
+              child: Text(
+                "Müşteri Bilgileri",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+            ),
+            // Spacing between Müşteri Bilgileri and texts
+            const Align(
+              child: SizedBox.square(
+                dimension: 20,
+              ),
+              alignment: Alignment.center,
+            ),
+
+            Row(
               children: [
-                RichText(
-                    text: TextSpan(
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          height: 1.5,
-                        ),
-                        children: <TextSpan>[
-                      TextSpan(text: ": $name   \n"),
-                      TextSpan(text: ": $phone  \n"),
-                      TextSpan(text: ": $mail   \n"),
-                      TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n"),
-                      TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n"),
-                      TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n"),
-                      TextSpan(text: ": $address\n"),
-                    ]))
+                Column(
+                  children: [
+                    RichText(
+                        text: const TextSpan(
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              height: 1.5,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: "  İsim\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: "  Telefon\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: "  Şehir\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: "  İlçe\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: "  Semt\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: "  Adres\n", style: TextStyle(color: Colors.white)),
+                            ]))
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+                const Align(
+                  child: SizedBox.square(
+                    dimension: 10,
+                  ),
+                  alignment: Alignment.center,
+                ),
+                Column(
+                  children: [
+                    RichText(
+                        text: TextSpan(
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              height: 1.5,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(text: ": $name   \n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: ": $phone  \n"),
+                              TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                              TextSpan(text: ": $address\n", style: TextStyle(color: Colors.white)),
+                            ]))
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                )
               ],
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            )
+            ),
           ],
-        ),
-      ],
+        )
     );
   }
 
@@ -350,8 +357,8 @@ class _QrEditState extends State<QrEdit> {
                 });
               },
               borderWidth: 1,
-              borderRadius: BorderRadius.circular(30),
-              fillColor: Colors.amber,
+              borderRadius: BorderRadius.circular(18),
+              fillColor: Colors.white,
               selectedColor: Colors.black,
               borderColor: Colors.black,
               selectedBorderColor: Colors.black,
@@ -367,6 +374,14 @@ class _QrEditState extends State<QrEdit> {
       child: ElevatedButton(
         // Customization
         child: const Text("Kaydet"),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        ),
         // Functional Partf
         onPressed: () {
           _updateCarpetStatus();
@@ -397,6 +412,14 @@ class _QrEditState extends State<QrEdit> {
       child: ElevatedButton(
         // Customization
         child: const Text("Başka QR Kod Okut"),
+        style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                )
+            )
+        ),
         // Functional Partf
         onPressed: () {
           Navigator.pop(context);

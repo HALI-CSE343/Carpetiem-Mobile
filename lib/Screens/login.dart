@@ -67,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
 
   List<Widget> usernameAndPassword() {
     return [
+      const SizedBox(height: 180),
       Image.asset(
         'assets/images/logo.png',
         scale: 4,
@@ -79,24 +80,50 @@ class _LoginPageState extends State<LoginPage> {
           fontSize: 30,
           fontWeight: FontWeight.bold
         ),
-
       ),
+
       const SizedBox(height: 30),
       TextFormField(
         key:  const Key('email'),
-        decoration:  const InputDecoration(labelText: 'Email'),
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(8.0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
+          ),
+          hintText: "Email",
+        ),
         autocorrect: false,
         validator: (val) => val!.isEmpty ? 'Email can\'t be empty.' : null,
         onSaved: (val) => _email = val!,
       ),
+      const SizedBox(height: 8),
        TextFormField(
         key:  const Key('password'),
-        decoration:  const InputDecoration(labelText: 'Password'),
+         decoration: InputDecoration(
+           contentPadding: const EdgeInsets.all(8.0),
+           border: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(18.0),
+           ),
+           focusedBorder: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(18.0),
+           ),
+           enabledBorder: OutlineInputBorder(
+             borderRadius: BorderRadius.circular(18.0),
+           ),
+           hintText: "Password",
+         ),
         obscureText: true,
         autocorrect: false,
         validator: (val) => val!.isEmpty ? 'Password can\'t be empty.' : null,
         onSaved: (val) => _password = val!,
       ),
+      const SizedBox(height: 15),
     ];
   }
 
@@ -108,24 +135,20 @@ class _LoginPageState extends State<LoginPage> {
               child: const Text(
                 "Login",
                 style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               ),
               onPressed: validateAndSubmit,
               style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all(const Size(100, 56)),
-                backgroundColor: MaterialStateProperty.all(const Color(0xFFFFBB38)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    side: const BorderSide(
-                      color: Colors.black,
-                      width: 4,
-                    ),
-                  ),
-                ),
+                  minimumSize: MaterialStateProperty.all(const Size(320, 48)),
+                  backgroundColor: MaterialStateProperty.all(Colors.black),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                      )
+                  )
               )
           )
         ];
@@ -134,11 +157,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-            backgroundColor: Colors.grey[900],
-        ),
-        backgroundColor: const Color(0xFFC1BFE5),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(child: Container(
 
             padding: EdgeInsets.all(16.0),
