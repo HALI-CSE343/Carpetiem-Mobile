@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
                   icon: const Icon(Icons.exit_to_app, color: Colors.black),
                   onPressed: () {
                     _signOut();
+                    Fluttertoast.showToast(msg: "Başarıyla çıkış yaptınız.", toastLength: Toast.LENGTH_LONG);
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                   },

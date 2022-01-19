@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'auth.dart';
 import '../pages/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,11 +37,14 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {});
         FirebaseFirestore.instance.collection('employees').doc(userId).get().then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
+            Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+            Fluttertoast.showToast(msg: "Hoş geldin ${data['name']}", toastLength: Toast.LENGTH_LONG);
             Navigator.pop(context);
             Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
           }
         });
       } catch (e) {
+        Fluttertoast.showToast(msg: "Böyle bir kullanıcı bulunmamakta.", toastLength: Toast.LENGTH_LONG);
         setState(() {});
       }
     } else {
