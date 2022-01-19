@@ -22,12 +22,12 @@ class _QrEditState extends State<QrEdit> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Edit QR", style: TextStyle(color: Colors.black)),
+        title: const Text("Halı Durumu Sayfası", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed:  () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Column(
@@ -118,13 +118,13 @@ class _QrEditState extends State<QrEdit> {
                               height: 1.5,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: "  İsim\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: "  Telefon\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: "  Şehir\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: "  İlçe\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: "  Semt\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: "  Adres\n", style: TextStyle(color: Colors.white)),
-                            ]))
+                          TextSpan(text: "  İsim\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: "  Telefon\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: "  Şehir\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: "  İlçe\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: "  Semt\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: "  Adres\n", style: TextStyle(color: Colors.white)),
+                        ]))
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,13 +145,13 @@ class _QrEditState extends State<QrEdit> {
                               height: 1.5,
                             ),
                             children: <TextSpan>[
-                              TextSpan(text: ": $name   \n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: ": $phone  \n"),
-                              TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: TextStyle(color: Colors.white)),
-                              TextSpan(text: ": $address\n", style: TextStyle(color: Colors.white)),
-                            ]))
+                          TextSpan(text: ": $name   \n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: ": $phone  \n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: TextStyle(color: Colors.white)),
+                          TextSpan(text: ": $address\n", style: TextStyle(color: Colors.white)),
+                        ]))
                   ],
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -159,8 +159,7 @@ class _QrEditState extends State<QrEdit> {
               ],
             ),
           ],
-        )
-    );
+        ));
   }
 
   Widget _getCarpets(BuildContext context) {
@@ -275,7 +274,7 @@ class _QrEditState extends State<QrEdit> {
                         ),
                         children: <TextSpan>[
                       TextSpan(text: ": $area m²\n"),
-                      TextSpan(text: ": $cost TL\n"),
+                      TextSpan(text: ": $cost ₺\n"),
                       TextSpan(text: ": ${status[0].toUpperCase()}${status.substring(1)}   \n"),
                       TextSpan(text: ": $type\n"),
                     ]))
@@ -308,7 +307,7 @@ class _QrEditState extends State<QrEdit> {
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: ToggleButtons(
               children: const [
@@ -358,7 +357,7 @@ class _QrEditState extends State<QrEdit> {
               },
               borderWidth: 1,
               borderRadius: BorderRadius.circular(18),
-              fillColor: Colors.white,
+              fillColor: Colors.amber,
               selectedColor: Colors.black,
               borderColor: Colors.black,
               selectedBorderColor: Colors.black,
@@ -376,12 +375,9 @@ class _QrEditState extends State<QrEdit> {
         child: const Text("Kaydet"),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))),
         // Functional Partf
         onPressed: () {
           _updateCarpetStatus();
@@ -414,12 +410,9 @@ class _QrEditState extends State<QrEdit> {
         child: const Text("Başka QR Kod Okut"),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))),
         // Functional Partf
         onPressed: () {
           Navigator.pop(context);

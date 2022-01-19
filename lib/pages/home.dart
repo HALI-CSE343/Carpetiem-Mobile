@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_code/Screens/login.dart';
 import 'package:qr_code/pages/qr/qr_generate.dart';
 import 'package:qr_code/pages/qr/qr_scan.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,6 +18,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TextEditingController phoneController = TextEditingController();
 
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,21 +32,21 @@ class _HomeState extends State<Home> {
         child: Column(
           children: [
             AppBar(
-              title: const Text(
-                  "CarpeTiem",
-                  style: TextStyle(fontSize: 30, color: Colors.black)
-              ),
+              title: const Text("CarpeTiem", style: TextStyle(fontSize: 30, color: Colors.black)),
               backgroundColor: Colors.white,
               elevation: 0,
               centerTitle: true,
               actions: [
                 IconButton(
-                  icon: Icon(Icons.exit_to_app, color: Colors.black),
-                  onPressed:  () => Navigator.pop(context),
+                  icon: const Icon(Icons.exit_to_app, color: Colors.black),
+                  onPressed: () {
+                    _signOut();
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                  },
                 ),
               ],
             ),
-
             const SizedBox(height: 130),
             /* Logo */
             Image.asset(
@@ -65,9 +71,6 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.symmetric(vertical: 1),
               child: _generateQRCode(),
             ),
-
-
-
           ],
         ),
       ),
@@ -77,57 +80,49 @@ class _HomeState extends State<Home> {
 
   ElevatedButton _generateQRCode() {
     return ElevatedButton(
-      onPressed: () {
-        String phone = phoneController.text;
-        if (phone.length != 14) {
-          Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
-        } else {
-          _findUser(phone);
-        }
-      },
-      child: const Text(
-        "QR Kod Oluştur",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+        onPressed: () {
+          String phone = phoneController.text;
+          if (phone.length != 14) {
+            Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
+          } else {
+            _findUser(phone);
+          }
+        },
+        child: const Text(
+          "QR Kod Oluştur",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
         style: ButtonStyle(
             minimumSize: MaterialStateProperty.all(const Size(320, 48)),
             backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        )
-    );
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))));
   }
 
   ElevatedButton _scanQRCode() {
     return ElevatedButton(
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const QrScan()));
-      },
-      child: const Text(
-        "QR Kod Tara",
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const QrScan()));
+        },
+        child: const Text(
+          "QR Kod Tara",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
         style: ButtonStyle(
             minimumSize: MaterialStateProperty.all(const Size(320, 48)),
             backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        )
-    );
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))));
   }
 
   Widget _getPhoneNumber() {
@@ -151,7 +146,7 @@ class _HomeState extends State<Home> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
-          hintText: "Customer's phone number",
+          hintText: "Müşteri Telefon Numarası",
         ),
         inputFormatters: [MaskTextInputFormatter(mask: "(###) ### ####")],
       ),
@@ -170,11 +165,6 @@ class _HomeState extends State<Home> {
     QueryDocumentSnapshot doc = customer.docs[0];
     // Document reference of that snapshot
     DocumentReference docRef = doc.reference;
-
-    Fluttertoast.showToast(
-      msg: "Phone: $phone, UserID: ${docRef.id}",
-      toastLength: Toast.LENGTH_LONG,
-    );
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => QrGenerate(customerID: docRef.id)));
   }

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class BaseAuth {
-
   Future<String?> currentUser();
   Future<String> signIn(String email, String password);
   Future<String> createUser(String email, String password);
@@ -12,22 +11,25 @@ abstract class BaseAuth {
 class Auth implements BaseAuth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  @override
   Future<String> signIn(String email, String password) async {
-
-    UserCredential  user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    UserCredential user = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
     return user.user!.uid;
   }
 
-
+  @override
   Future<void> signOut() async {
     return _firebaseAuth.signOut();
   }
 
+  @override
   Future<String?> currentUser() async {
-    User? user = await _firebaseAuth.currentUser;
-    return user != null ? user.uid : null;
-  }
+    User? user = _firebaseAuth.currentUser;
 
+    print("selam $user");
+
+    return user?.uid;
+  }
 
   @override
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrGenerate extends StatefulWidget {
@@ -16,19 +17,22 @@ class _QrGenerateState extends State<QrGenerate> {
   TextEditingController priceController = TextEditingController();
   String carpetType = "ince";
 
+  String area = "";
+  String price = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Generate QR", style: TextStyle(color: Colors.black)),
+        title: const Text("QR Kod Oluşturma Sayfası", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed:  () => Navigator.pop(context),
-          ),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Column(
         children: [
@@ -62,10 +66,10 @@ class _QrGenerateState extends State<QrGenerate> {
       future: customers.doc(widget.customerID).get(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text("Something went wrong.");
+          return const Text("Bir şeyler yanlış gitti.");
         }
         if (snapshot.hasData && !snapshot.data!.exists) {
-          return const Text("Customer does not exist");
+          return const Text("Müşteri sistemde kayıtlı değil");
         }
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -78,48 +82,50 @@ class _QrGenerateState extends State<QrGenerate> {
   }
 
   Widget _printCustomerInfo(address, city, district, neighborhood, name, phone) {
-    return Card(
-      color: Colors.black,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          // Spacing between Appbar and Müşteri Bilgileri
-          const Align(
-            child: SizedBox.square(
-              dimension: 20,
-            ),
-            alignment: Alignment.center,
-          ),
-
-          // Text: Müşteri Bilgileri
-          const Center(
-            child: Text(
-              "Müşteri Bilgileri",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-          // Spacing between Müşteri Bilgileri and texts
-          const Align(
-            child: SizedBox.square(
-              dimension: 20,
-            ),
-            alignment: Alignment.center,
-          ),
-
-          Row(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+          color: Colors.black,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Column(
+              // Spacing between Appbar and Müşteri Bilgileri
+              const Align(
+                child: SizedBox.square(
+                  dimension: 20,
+                ),
+                alignment: Alignment.center,
+              ),
+
+              // Text: Müşteri Bilgileri
+              const Center(
+                child: Text(
+                  "Müşteri Bilgileri",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
+              // Spacing between Müşteri Bilgileri and texts
+              const Align(
+                child: SizedBox.square(
+                  dimension: 20,
+                ),
+                alignment: Alignment.center,
+              ),
+
+              Row(
                 children: [
-                  RichText(
-                      text: const TextSpan(
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            height: 1.5,
-                          ),
-                          children: <TextSpan>[
+                  Column(
+                    children: [
+                      RichText(
+                          text: const TextSpan(
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
+                              children: <TextSpan>[
                             TextSpan(text: "  İsim\n", style: TextStyle(color: Colors.white)),
                             TextSpan(text: "  Telefon\n", style: TextStyle(color: Colors.white)),
                             TextSpan(text: "  Şehir\n", style: TextStyle(color: Colors.white)),
@@ -127,41 +133,41 @@ class _QrGenerateState extends State<QrGenerate> {
                             TextSpan(text: "  Semt\n", style: TextStyle(color: Colors.white)),
                             TextSpan(text: "  Adres\n", style: TextStyle(color: Colors.white)),
                           ]))
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-              ),
-              const Align(
-                child: SizedBox.square(
-                  dimension: 10,
-                ),
-                alignment: Alignment.center,
-              ),
-              Column(
-                children: [
-                  RichText(
-                      text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            height: 1.5,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(text: ": $name   \n", style: TextStyle(color: Colors.white)),
-                            TextSpan(text: ": $phone  \n"),
-                            TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: TextStyle(color: Colors.white)),
-                            TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: TextStyle(color: Colors.white)),
-                            TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: TextStyle(color: Colors.white)),
-                            TextSpan(text: ": $address\n", style: TextStyle(color: Colors.white)),
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  ),
+                  const Align(
+                    child: SizedBox.square(
+                      dimension: 10,
+                    ),
+                    alignment: Alignment.center,
+                  ),
+                  Column(
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                height: 1.5,
+                              ),
+                              children: <TextSpan>[
+                            TextSpan(text: ": $name   \n", style: const TextStyle(color: Colors.white)),
+                            TextSpan(text: ": $phone  \n", style: const TextStyle(color: Colors.white)),
+                            TextSpan(text: ": ${city[0].toUpperCase()}${city.substring(1)}   \n", style: const TextStyle(color: Colors.white)),
+                            TextSpan(text: ": ${district[0].toUpperCase()}${district.substring(1)}\n", style: const TextStyle(color: Colors.white)),
+                            TextSpan(text: ": ${neighborhood[0].toUpperCase()}${neighborhood.substring(1)}\n", style: const TextStyle(color: Colors.white)),
+                            TextSpan(text: ": $address\n", style: const TextStyle(color: Colors.white)),
                           ]))
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                  )
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-              )
+              ),
             ],
-          ),
-        ],
-      )
+          )),
     );
   }
 
@@ -186,7 +192,7 @@ class _QrGenerateState extends State<QrGenerate> {
 
         Padding(
           padding: const EdgeInsets.all(15),
-          child: TextField(
+          child: TextFormField(
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(8.0),
               border: OutlineInputBorder(
@@ -198,18 +204,20 @@ class _QrGenerateState extends State<QrGenerate> {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18.0),
               ),
-              hintText: "Carpet's size(Ex: 0.5, 2, 97(m^2))",
+              hintText: "Halı Ölçüsü (örnek: 3m²)",
             ),
             keyboardType: TextInputType.phone,
             cursorWidth: 2,
             cursorHeight: 20,
             cursorColor: Colors.black,
             controller: areaController,
+            onChanged: (val) => area = val,
+            autocorrect: false,
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(15),
-          child: TextField(
+          child: TextFormField(
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(8.0),
               border: OutlineInputBorder(
@@ -221,13 +229,14 @@ class _QrGenerateState extends State<QrGenerate> {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(18.0),
               ),
-              hintText: "Carpet's price(Ex: 0.9, 24.8, 73(Tl))",
+              hintText: "Halının Fiyatı (örnek: 24.8₺)",
             ),
             keyboardType: TextInputType.phone,
             cursorWidth: 2,
             cursorHeight: 20,
             cursorColor: Colors.black,
             controller: priceController,
+            onChanged: (val) => price = val,
           ),
         ),
         Padding(
@@ -246,12 +255,9 @@ class _QrGenerateState extends State<QrGenerate> {
         child: const Text("Başka QR Kod Oluştur"),
         style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))),
         // Functional Partf
         onPressed: () {
           Navigator.pop(context);
@@ -262,8 +268,6 @@ class _QrGenerateState extends State<QrGenerate> {
   }
 
   Widget _generateButton() {
-    String area = areaController.text;
-    String cost = priceController.text;
     String customerID = widget.customerID;
     String status = "Alındı";
     String type = carpetType;
@@ -271,49 +275,53 @@ class _QrGenerateState extends State<QrGenerate> {
 
     return Padding(
       child: ElevatedButton(
-        // Customization
-        child: const Text("Oluştur"),
-        style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.black),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                )
-            )
-        ),
-        // Functional Partf
-        onPressed: () {
-          _getNewCarpetID(area, cost, customerID, status, type).then((value) => {
-                newCarpetID = value,
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: 200,
-                              height: 300,
-                              child: QrImage(
-                                data: newCarpetID,
-                              ),
+          // Customization
+          child: const Text("Oluştur"),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.black),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ))),
+          // Functional Partf
+          onPressed: () {
+            if (area.isEmpty && price.isEmpty) {
+              Fluttertoast.showToast(msg: "Ölçü ve fiyat kısımlarını boş bıraktınız.", toastLength: Toast.LENGTH_LONG);
+            } else if (area.isEmpty) {
+              Fluttertoast.showToast(msg: "Ölçü kısmını boş bıraktınız.", toastLength: Toast.LENGTH_LONG);
+            } else if (price.isEmpty) {
+              Fluttertoast.showToast(msg: "Fiyat kısmını boş bıraktınız.", toastLength: Toast.LENGTH_LONG);
+            } else {
+              _getNewCarpetID(area, price, customerID, status, type).then((value) => {
+                    newCarpetID = value,
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 200,
+                                  height: 300,
+                                  child: QrImage(
+                                    data: newCarpetID,
+                                  ),
+                                ),
+                                Text("Carpet ID: $newCarpetID"),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.download_rounded),
+                                  iconSize: 50,
+                                )
+                              ],
                             ),
-                            Text("Carpet ID: $newCarpetID"),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.download_rounded),
-                              iconSize: 50,
-                            )
-                          ],
-                        ),
-                      );
-                    })
-              });
-        },
-      ),
+                          );
+                        })
+                  });
+            }
+          }),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     );
   }
@@ -349,7 +357,7 @@ class _QrGenerateState extends State<QrGenerate> {
             style: const TextStyle(color: Colors.black, fontSize: 20),
             underline: Container(
               height: 2,
-              color: Colors.deepPurpleAccent,
+              color: Colors.black,
             ),
             onChanged: (String? newValue) {
               setState(() {
