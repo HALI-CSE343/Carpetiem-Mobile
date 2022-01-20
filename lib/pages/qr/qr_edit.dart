@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'qr_scan.dart';
 
 class QrEdit extends StatefulWidget {
-  final Barcode qrID;
+  final String? qrID;
 
   const QrEdit({Key? key, required this.qrID}) : super(key: key);
 
@@ -26,7 +26,7 @@ class _QrEditState extends State<QrEdit> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -167,7 +167,7 @@ class _QrEditState extends State<QrEdit> {
     CollectionReference carpets = FirebaseFirestore.instance.collection('carpets');
 
     return FutureBuilder<DocumentSnapshot>(
-      future: carpets.doc(widget.qrID.code).get(),
+      future: carpets.doc(widget.qrID).get(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Text("Something went wrong.");
@@ -175,7 +175,7 @@ class _QrEditState extends State<QrEdit> {
         if (snapshot.hasData && !snapshot.data!.exists) {
           return const Text("Carpet does not exist");
         }
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
           if (currentCarpetStatus.isEmpty) {
@@ -392,7 +392,7 @@ class _QrEditState extends State<QrEdit> {
     CollectionReference carpets = FirebaseFirestore.instance.collection('carpets');
 
     return carpets
-        .doc(widget.qrID.code)
+        .doc(widget.qrID)
         .update({'status': currentCarpetStatus})
         .then((value) => Fluttertoast.showToast(
               msg: "Halı durumu başarıyla $currentCarpetStatus yapıldı.",

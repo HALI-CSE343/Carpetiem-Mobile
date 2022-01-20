@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code/Screens/login.dart';
+import 'package:qr_code/pages/list_carpets.dart';
 import 'package:qr_code/pages/qr/qr_generate.dart';
 import 'package:qr_code/pages/qr/qr_scan.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -61,15 +62,22 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: _getPhoneNumber(),
             ),
+
             /* First Button */
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: _listCarpets(),
+            ),
+
+            /* Second Button */
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: _scanQRCode(),
             ),
 
-            /* Second Button */
+            /* Third Button */
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: _generateQRCode(),
             ),
           ],
@@ -86,7 +94,7 @@ class _HomeState extends State<Home> {
           if (phone.length != 14) {
             Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
           } else {
-            _findUser(phone);
+            _findUser(phone, "generate");
           }
         },
         child: const Text(
@@ -112,6 +120,32 @@ class _HomeState extends State<Home> {
         },
         child: const Text(
           "QR Kod Tara",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        style: ButtonStyle(
+            minimumSize: MaterialStateProperty.all(const Size(320, 48)),
+            backgroundColor: MaterialStateProperty.all(Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ))));
+  }
+
+  ElevatedButton _listCarpets() {
+    return ElevatedButton(
+        onPressed: () {
+          String phone = phoneController.text;
+          if (phone.length != 14) {
+            Fluttertoast.showToast(msg: "Lütfen doğru telefon numarası giriniz");
+          } else {
+            _findUser(phone, "list");
+          }
+        },
+        child: const Text(
+          "Halıları Listele",
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -154,7 +188,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future _findUser(String phone) async {
+  Future _findUser(String phone, String whichButton) async {
     // Customer as QuerySnapshot
     QuerySnapshot customer = await FirebaseFirestore.instance.collection('customers').where('phone', isEqualTo: phone).get();
     // Warn the user if customer doesn't exist
@@ -167,6 +201,10 @@ class _HomeState extends State<Home> {
     // Document reference of that snapshot
     DocumentReference docRef = doc.reference;
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => QrGenerate(customerID: docRef.id)));
+    if (whichButton.compareTo("generate") == 0) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => QrGenerate(customerID: docRef.id)));
+    } else if (whichButton.compareTo("list") == 0) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ListCarpets(customerID: docRef.id)));
+    }
   }
 }

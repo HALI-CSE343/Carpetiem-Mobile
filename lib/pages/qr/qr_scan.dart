@@ -45,7 +45,7 @@ class _QrScanState extends State<QrScan> {
     controller.scannedDataStream.listen((scanData) {
       controller.stopCamera();
       Navigator.pop(context);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => QrEdit(qrID: scanData)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => QrEdit(qrID: scanData.code)));
     });
   }
 }
