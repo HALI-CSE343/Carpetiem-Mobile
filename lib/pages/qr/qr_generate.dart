@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 
 class QrGenerate extends StatefulWidget {
   final String customerID;
@@ -15,6 +20,7 @@ class QrGenerate extends StatefulWidget {
 class _QrGenerateState extends State<QrGenerate> {
   TextEditingController areaController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  ScreenshotController screenshotController = ScreenshotController();
   String carpetType = "ince";
 
   String area = "";
@@ -301,17 +307,24 @@ class _QrGenerateState extends State<QrGenerate> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  width: 200,
-                                  height: 300,
-                                  child: QrImage(
-                                    data: newCarpetID,
+                                Screenshot(
+                                  controller: screenshotController,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: 200,
+                                    height: 300,
+                                    child: QrImage(
+                                      data: newCarpetID,
+                                      backgroundColor: Colors.white,
+                                    ),
                                   ),
                                 ),
-                                Text("Carpet ID: $newCarpetID"),
+                                Text("Halı ID'si: $newCarpetID"),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: _takeScreenshot,
                                   icon: const Icon(Icons.download_rounded),
                                   iconSize: 50,
                                 )
@@ -374,5 +387,13 @@ class _QrGenerateState extends State<QrGenerate> {
         ),
       ],
     );
+  }
+
+  void _takeScreenshot() async {
+    final uint8List = await screenshotController.capture();
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/image.png');
+    await file.writeAsBytes(uint8List!);
+    await Share.shareFiles([file.path]);
   }
 }

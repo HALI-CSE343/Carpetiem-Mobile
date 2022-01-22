@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_code/pages/qr/qr_edit.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 
 class ListCarpets extends StatefulWidget {
   final String customerID;
@@ -61,6 +66,8 @@ class _ListCarpetsState extends State<ListCarpets> {
   }
 
   Widget _singleCard(BuildContext context, int index, Carpet carpet) {
+    ScreenshotController screenshotController = ScreenshotController();
+
     return InkWell(
       child: Card(
         color: Colors.black,
@@ -117,24 +124,45 @@ class _ListCarpetsState extends State<ListCarpets> {
               crossAxisAlignment: CrossAxisAlignment.start,
             ),
             const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SizedBox(
-                child: QrImage(
-                  data: carpet.carpetID,
-                  backgroundColor: Colors.white,
+            SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: ElevatedButton(
+                  child: Screenshot(
+                    controller: screenshotController,
+                    child: QrImage(
+                      data: carpet.carpetID,
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                  onPressed: () {
+                    _takeScreenshot(screenshotController);
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black),
+                  ),
                 ),
-                width: 100,
-                height: 100,
               ),
+              width: 140,
+              height: 140,
             ),
           ],
         ),
       ),
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => QrEdit(qrID: carpet.carpetID)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrEdit(qrID: carpet.carpetID))).then((_) {
+          setState(() {});
+        });
       },
     );
+  }
+
+  void _takeScreenshot(ScreenshotController screenshotController) async {
+    final uint8List = await screenshotController.capture();
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/image.png');
+    await file.writeAsBytes(uint8List!);
+    await Share.shareFiles([file.path]);
   }
 }
 
